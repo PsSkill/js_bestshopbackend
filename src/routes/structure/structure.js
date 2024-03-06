@@ -1,10 +1,33 @@
 const express = require("express");
 
-const structure = require("../../controllers/structure/category");
+const category = require("../../controllers/structure/category");
+const item_name = require("../../controllers/structure/item_name");
+const sub_category = require("../../controllers/structure/sub_category");
+const brand = require("../../controllers/structure/brand");
+const model = require("../../controllers/structure/model");
+const color = require("../../controllers/structure/color");
+const size = require("../../controllers/structure/size");
 
 const router  = express.Router()
 
-router.get("/category", structure.get_category)
+router.get("/category", category.get_category)
+
+
+router.get("/item-name", item_name.get_item_name)
+
+
+
+router.get("/sub-category", sub_category.get_sub_category)
+
+
+
+router.get("/brand", brand.get_brand)
+
+router.get("/model", model.get_model)
+
+router.get("/color", color.get_color)
+
+router.get("/size", size.get_size)                                                                                                                           
 
 module.exports = router;
 
