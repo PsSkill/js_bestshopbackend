@@ -26,5 +26,5 @@ function post_query_database(
     response.json(success_message);
   });
 }
-
+                        
 module.exports = { get_query_database, post_query_database };
