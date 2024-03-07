@@ -7,11 +7,12 @@ const brand = require("../../controllers/structure/brand");
 const model = require("../../controllers/structure/model");
 const color = require("../../controllers/structure/color");
 const size = require("../../controllers/structure/size");
+const image_uploader_middleware = require("../../middleware/image_uploader");
 
 const router  = express.Router()
 
 router.get("/category", category.get_category)
-
+router.post("/category", image_uploader_middleware, category.post_category)
 
 router.get("/item-name", item_name.get_item_name)
 
