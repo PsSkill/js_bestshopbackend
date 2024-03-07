@@ -25,6 +25,7 @@ exports.post_sub_category = (req, res) => {
       error: "item_name and name are required",
     });
   }
+  name = name.toUpperCase();
   const query = `INSERT INTO sub_category(item_name, name, image_path)
     VALUES (${item_name}, '${name}', '${image_path}')`;
   const error_message = "Error adding Sub Category";

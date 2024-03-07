@@ -25,6 +25,7 @@ exports.post_brand = (req, res) => {
       error: "sub_category and name are required",
     });
   }
+  name = name.toUpperCase();
   const query = `INSERT INTO brand(sub_category, name, image_path)
       VALUES (${sub_category}, '${name}', '${image_path}')`;
   const error_message = "Error adding brand";

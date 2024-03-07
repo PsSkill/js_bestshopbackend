@@ -19,14 +19,15 @@ exports.get_color = (req, res) => {
 };
 
 exports.post_color = (req, res) => {
-  const { model, name} = req.body;
-  if (!model || !color) {
+  const { model, name } = req.body;
+  if (!model || !name) {
     res.status(400).json({
-      error: "model and color are required",
+      error: "model and color name are required",
     });
   }
-  const query = `INSERT INTO color(model, color)
-    VALUES (${model}, '${color}')`;
+  name = name.toUpperCase();
+  const query = `INSERT INTO color(model, name)
+  VALUES (${model}, '${name}')`;
   const error_message = "Error adding Color";
   const success_message = "Color added succesfully";
   post_query_database(query, res, error_message, success_message);

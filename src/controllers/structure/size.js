@@ -20,14 +20,15 @@ exports.get_size = (req, res) => {
 };
 
 exports.post_size = (req, res) => {
-  const { color, size } = req.body;
-  if (!color || !size) {
+  const { color, name } = req.body;
+  if (!color || !name) {
     res.status(400).json({
-      error: "color and size are required",
+      error: "color and size name are required",
     });
   }
-  const query = `INSERT INTO size(color, size)
-  VALUES (${color}, '${size}')`;
+  name = name.toUpperCase()
+  const query = `INSERT INTO size(color, name)
+  VALUES (${color}, '${name}')`;
   const error_message = "Error adding size";
   const success_message = "Size added Succesfully";
   post_query_database(query, res, error_message, success_message);

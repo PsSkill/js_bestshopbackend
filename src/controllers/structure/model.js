@@ -25,6 +25,7 @@ exports.post_model = (req, res) => {
       error: "brand and name are required",
     });
   }
+  name = name.toUpperCase();
   const query = `INSERT INTO model(brand, name)
         VALUES (${brand}, '${name}')`;
   const error_message = "Error adding Model";

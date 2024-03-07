@@ -23,8 +23,9 @@ exports.post_item_name = (req, res) => {
       error: "category and name are required",
     });
   }
+  name = name.toUpperCase();
   const query = `INSERT INTO item_name(category, name, image_path) 
-    VALUES (${category}, '${name}', '${image_path}')`;
+  VALUES (${category}, '${name}', '${image_path}')`;
   const error_message = "Error adding item_name";
   const success_message = "Item name added succesfully";
   post_query_database(query, res, error_message, success_message);
