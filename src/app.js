@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const path = require('path')
 const body_parser = require("body-parser")
 
 //routes
@@ -19,8 +20,12 @@ const port = 5000;
 // Enable CORS AND LOGGER MIDDLEWARE
 app.use(cors());
 app.use(morgan_config);
-app.use(body_parser.json())
+app.use(express.json())
 
+// To serve static images in my upload folder : 
+// console.log(__dirname+'/uploads')
+app.use('/uploads', express.static(path.join(__dirname + '/uploads')))
+// Routes
 app.use("/api/structure", structure_routes);
 
 // Start server
