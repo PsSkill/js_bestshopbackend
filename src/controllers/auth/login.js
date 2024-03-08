@@ -1,7 +1,8 @@
 const bcrypt = require("bcrypt");
 const { get_query_database } = require("../../config/database_utlis");
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = "hehe i am not a evil guy okieee";
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 exports.post_login = async (req, res) => {
     const { name, password } = req.body;
@@ -31,7 +32,7 @@ exports.post_login = async (req, res) => {
             id: user_detail.id,
             location: user_detail.location,
         };
-        const token = jwt.sign(token_payload, JWT_SECRET, {
+        const token = jwt.sign(token_payload, process.env.JWT_SECRET, {
             expiresIn: "24h",
         });
         delete user_detail.password;
