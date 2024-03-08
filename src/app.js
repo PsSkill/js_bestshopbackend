@@ -8,7 +8,7 @@ const path = require('path')
 const structure_routes = require("./routes/structure/structure");
 const stock_routes = require("./routes/stock/stock")
 const auth_routes = require("./routes/auth/signup")
-const login_auth_routes = require("./routes/auth/login")
+const login_auth_routes = require("./routes/auth/login");
 
 //middleware logger config
 const morgan_config = morgan(
