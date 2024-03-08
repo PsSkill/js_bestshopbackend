@@ -28,7 +28,37 @@ exports.post_brand = (req, res) => {
   name = name.toUpperCase();
   const query = `INSERT INTO brand(sub_category, name, image_path)
       VALUES (${sub_category}, '${name}', '${image_path}')`;
-  const error_message = "Error adding brand";
-  const success_message = "brand added succesfully";
+  const error_message = "Error adding Brand";
+  const success_message = "Brand added successfully";
   post_query_database(query, res, error_message, success_message);
 };
+
+exports.update_brand = (req, res) => {
+  const { id, name } = req.body;
+  if (!id || !name) {
+    res.status(400).json({
+      error: "id and name are required",
+    });
+  }
+  name = name.toUpperCase();
+  const query = `UPDATE brand
+    SET name = '${name}'
+    WHERE id = ${id}`;
+  const error_message = "Error! Failed to Update Brand";
+  const success_message = "Brand Updated successfully";
+  post_query_database(query, res, error_message, success_message);
+};
+
+exports.delete_brand = (req, res) => {
+  const { id } = req.body;
+  if (!id) {
+    res.status(400).json({
+      error: "ID is required",
+    });
+  }
+  const query = `UPDATE brand
+  SET status = '0'
+  WHERE id =${id}`;
+  const error_message = "Error! Failed to delete Brand";
+  const success_message = "Brand Deleted successfully";
+}
