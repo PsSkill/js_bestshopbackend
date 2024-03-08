@@ -7,6 +7,7 @@ const body_parser = require("body-parser")
 
 //routes
 const structure_routes = require("./routes/structure/structure");
+const stock_routes = require("./routes/stock/stock")
 
 
 //middleware logger config
@@ -27,6 +28,7 @@ app.use(express.json())
 app.use('/uploads', express.static(path.join(__dirname + '/uploads')))
 // Routes
 app.use("/api/structure", structure_routes);
+app.use("/api/stock", stock_routes)
 
 // Start server
 app.listen(port, () => {

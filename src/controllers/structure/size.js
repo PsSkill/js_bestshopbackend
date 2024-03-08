@@ -1,67 +1,103 @@
-const { query } = require("express");
-const {
-  get_query_database,
-  post_query_database,
-} = require("../../config/database_utlis");
+const { get_query_database, post_query_database } = require("../../config/database_utlis");
 
-exports.get_size = (req, res) => {
+exports.get_size = async (req, res) => {
   let color = req.query.color;
+
   if (!color) {
-    res.status(400).json({
+    return res.status(400).json({
       error: "color is required in query!!",
     });
   }
-  const query = `SELECT id, name
-    FROM size 
-    WHERE color = ${color}
-    AND status = '1'`;
-  const error_message = "Error Fetching Size";
-  get_query_database(query, res, error_message);
+
+  try {
+    const query = `
+      SELECT id, name
+      FROM size 
+      WHERE color = ?
+      AND status = '1'`;
+
+    const sizes = await get_query_database(query, [color]);
+    res.json(sizes);
+  } catch (err) {
+    console.error("Error fetching sizes:", err);
+    res.status(500).json({ error: "Error fetching sizes" });
+  }
 };
 
-exports.post_size = (req, res) => {
+exports.post_size = async (req, res) => {
   const { color, name } = req.body;
   if (!color || !name) {
-    res.status(400).json({
+    return res.status(400).json({
       error: "color and size name are required",
     });
   }
-  name = name.toUpperCase();
-  const query = `INSERT INTO size(color, name)
-  VALUES (${color}, '${name}')`;
-  const error_message = "Error adding Size";
-  const success_message = "Size added successfully";
-  post_query_database(query, res, error_message, success_message);
+
+  try {
+    const formatted_name = name.toUpperCase();
+    const query = `
+      INSERT INTO size(color, name)
+      VALUES (?, ?)`;
+
+    const success_message = await post_query_database(
+      query,
+      [color, formatted_name],
+      "Size added successfully"
+    );
+    res.json({ message: success_message });
+  } catch (err) {
+    console.error("Error adding size:", err);
+    res.status(500).json({ error: "Error adding size" });
+  }
 };
 
-exports.update_size = (req, res) => {
+exports.update_size = async (req, res) => {
   const { id, name } = req.body;
   if (!id || !name) {
-    res.status(400).json({
+    return res.status(400).json({
       error: "id and name are required",
     });
   }
+  try {
+    const formatted_name = name.toUpperCase();
+    const query = `
+      UPDATE size
+      SET name = ?
+      WHERE id = ?`;
 
-  name = name.toUpperCase();
-  const query = `UPDATE size
-    SET name = '${name}'\
-    WHERE id = ${id}`;
-  const error_message = "Error! Failed to Update Size";
-  const success_message = "Size Updated successfully";
-  post_query_database(query, res, error_message, success_message);
+    const success_message = await post_query_database(
+      query,
+      [formatted_name, id],
+      "Size updated successfully"
+    );
+    res.json(success_message);
+  } catch (err) {
+    console.error("Error updating size:", err);
+    res.status(500).json({ error: "Error updating size" });
+  }
 };
 
-exports.delete_size = (req, res) => {
+exports.delete_size = async (req, res) => {
   const { id } = req.body;
   if (!id) {
-    res.status(400).json({
+    return res.status(400).json({
       error: "ID is required",
     });
   }
-  const query = `UPDATE size
-  SET status = '0'
-  WHERE id = ${id}`;
-  const error_message = "Error! Failed to delete Size";
-  const success_message = "Size Deleted successfully";
-  post_query_database(query, res, error_message, success_message);
+
+  try {
+    const query = `
+      UPDATE size
+      SET status = '0'
+      WHERE id = ?`;
+
+    const success_message = await post_query_database(
+      query,
+      [id],
+      "Size deleted Successfully"
+    );
+    res.json(success_message);
+  } catch (err) {
+    console.error("Error deleting size:", err);
+    res.status(500).json({ error: "Error deleting size" });
+  }
 };
