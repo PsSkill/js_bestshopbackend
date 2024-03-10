@@ -50,7 +50,7 @@ exports.update_shop_location = async (req, res) => {
   }
   try {
     const formatted_name = name.toUpperCase();
-    const query = `UPDATE shop-location
+    const query = `UPDATE shop_location
     SET name = ?
     WHERE id = ?`;
     const success_message = await post_query_database(
@@ -60,7 +60,7 @@ exports.update_shop_location = async (req, res) => {
     );
     res.json({ message: success_message });
   } catch (err) {
-    console.error("Error updating shop location");
+    console.error("Error updating shop location:", err);
     res.status(500).json({
       error: "Error updating shop location",
     });
@@ -70,7 +70,7 @@ exports.update_shop_location = async (req, res) => {
 exports.delete_shop_location = async(req, res)=>{
   const {id} = req.body
   try {
-    const query = `UPDATE shop-location
+    const query = `UPDATE shop_location
     SET status = '0'
     WHERE id = ?`
     const success_message = await post_query_database(
