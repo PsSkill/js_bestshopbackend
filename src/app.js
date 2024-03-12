@@ -28,12 +28,12 @@ app.use(express.json());
 // Routes
 // There is no need of token for login for sigin middleware is done in routes
 app.use("/api/auth", auth_routes);
+app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
+app.use("/api/stock", stock_routes);
 app.use(authenticate_token);
 // To serve static images in my upload folder :
 // console.log(__dirname+'/uploads')
-app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
 app.use("/api/structure", structure_routes);
-app.use("/api/stock", stock_routes);
 app.use("/api/master", master_routes);
 
 // Start server

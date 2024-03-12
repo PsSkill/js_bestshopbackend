@@ -1,14 +1,14 @@
-const {get_query_database} = require("../../config/database_utlis")
+const { get_query_database } = require("../../config/database_utlis");
 
-exports.get_csv = async (req, res)=>{
-    const {date, shop_location, bill_number} = req.query
-    if(!date || !shop_location){
-        return res.status(400).json({
-            err:"Date and shop location is required"
-        })
-    }
-    try{
-        const query = `SELECT 
+exports.get_csv = async (req, res) => {
+  const { date, shop_location, bill_number } = req.query;
+  if (!date || !shop_location) {
+    return res.status(400).json({
+      err: "Date and shop location are required",
+    });
+  }
+  try {
+    let query = `SELECT 
         it.name AS ItemName, 
         s.quantity AS QTY, 
         s.purchasing_price AS PurchasePrice, 
@@ -36,19 +36,18 @@ exports.get_csv = async (req, res)=>{
         model m ON s.model = m.id
     INNER JOIN 
         color co ON s.color = co.id
-    WHERE s.date = ? AND s.shop_location = ?`
+    WHERE s.date = ? AND s.shop_location = ?`;
 
-    query_params = [date, shop_location]
-    if(bill_number){
-        query += ` AND s.bill_number = ?`
-        query_params.push(bill_number)
+    const query_params = [date, shop_location];
+    if (bill_number) {
+      query += ` AND s.bill_number = ?`;
+      query_params.push(bill_number);
     }
-    
+
     const csv_data = await get_query_database(query, query_params);
-        res.json(csv_data);
-    } catch (err) {
-        console.error("Error fetching csv data:", err);
-        res.status(500).json({ error: err.message });
-    }
+    res.json(csv_data);
+  } catch (err) {
+    console.error("Error fetching csv data:", err);
+    res.status(500).json({ error: err.message });
+  }
 };
-
