@@ -115,13 +115,13 @@ exports.post_stocks = async (req, res) => {
       const query =
         "INSERT INTO stock (shop_location, bill_number, date, time, year, category, item_name, sub_category, brand, model, color, size, quantity, name, purchasing_price, selling_price, mrp, total_price) VALUES ?";
       await post_query_database(query, [value_sets]);
-      res.status(200).json("Stock inserted successfully");
+      res.status(200).json("Stock added successfully");
     } else {
-      res.status(200).json("No data to insert");
+      res.status(200).json("No stock to add");
     }
   } catch (err) {
-    console.error(`Error inserting data: ${err.message}`);
-    res.status(500).send("Error inserting data");
+    console.error(`Error adding Stock: ${err.message}`);
+    res.status(500).send("Error adding Stock");
   }
 };
 
@@ -142,3 +142,57 @@ function format_time(date) {
   const seconds = String(date.getSeconds()).padStart(2, "0");
   return `${hours}:${minutes}:${seconds}`;
 }
+
+exports.update_stocks = async (req, res) => {
+  const { id, quantity, selling_price } = req.body;
+  if (!id || !quantity || !selling_price) {
+    return res.status(400).json({
+      err: "id, quantity and selling price are required",
+    });
+  }
+  try {
+    const total_price = quantity * selling_price;
+    const query = `UPDATE stock 
+    SET quantity = ?, selling_price = ?, mrp = ?, total_price = ?
+    WHERE id = ?`;
+    const success_message = await post_query_database(
+      query,
+      [quantity, selling_price, selling_price, total_price, id],
+      "Stock updated successfully"
+    );
+    res.status(200).json({
+      success_message
+    })
+  } catch (err) {
+    console.error("Error updating stocks", err);
+    res.status(500).json({
+      err:"Error updating stocks"
+    })
+  }
+};
+
+exports.delete_stocks = async (req, res) => {
+  const id = req.body.id;
+  if (!id) {
+    return res.status(400).json({
+      err: "id is required",
+    });
+  }
+  try {
+    const query = `DELETE FROM stock 
+    WHERE id = ?`;
+    const success_message = await post_query_database(
+      query,
+      [id],
+      "Stock delete successfully"
+    );
+    res.status(200).json({
+      success_message,
+    });
+  } catch (err) {
+    console.error("Error deleting stocks", err);
+    res.status(500).json({
+      err: "Error deleting Stock",
+    });
+  }
+};

@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.get("/stock", stock.get_stocks)
 router.post("/stock", stock.post_stocks)
+router.put("/stock", stock.update_stocks)
+router.delete("/stock", stock.delete_stocks)
 
 router.get("/export-csv", csv.get_csv)
 
