@@ -13,7 +13,7 @@ exports.get_stocks = async (req, res) => {
   }
   try {
     const query = `
-      SELECT s.id, sl.name AS shop, s.date, s.time, s.name, m.name AS model_name, c.name AS color_name, si.name AS size_name, s.quantity, s.mrp, s.total_price
+      SELECT s.id, sl.name AS shop, s.date, s.time, s.name, m.name AS model_name, c.name AS color_name, si.name AS size_name, s.quantity, s.selling_price, s.mrp, s.total_price
       FROM stock s
       INNER JOIN shop_location sl ON s.shop_location = sl.id
       INNER JOIN model m ON s.model = m.id
@@ -144,7 +144,7 @@ function format_time(date) {
 }
 
 exports.update_stocks = async (req, res) => {
-  const { id, quantity, selling_price } = req.body;
+  const { id, quantity, selling_price, mrp} = req.body;
   if (!id || !quantity || !selling_price) {
     return res.status(400).json({
       err: "id, quantity and selling price are required",
@@ -157,7 +157,7 @@ exports.update_stocks = async (req, res) => {
     WHERE id = ?`;
     const success_message = await post_query_database(
       query,
-      [quantity, selling_price, selling_price, total_price, id],
+      [quantity, selling_price, mrp, total_price, id],
       "Stock updated successfully"
     );
     res.status(200).json({
