@@ -36,17 +36,17 @@ router.put("/brand", brand.update_brand);
 router.delete("/brand", brand.delete_brand);
 
 router.get("/model", model.get_model);
-router.post("/model", image_uploader_middleware, model.post_model);
+router.post("/model", model.post_model);
 router.put("/model", model.update_model);
 router.delete("/model", model.delete_model);
 
 router.get("/color", color.get_color);
-router.post("/color", image_uploader_middleware, color.post_color);
+router.post("/color", color.post_color);
 router.put("/color", color.update_color);
 router.delete("/color", color.delete_color);
 
 router.get("/size", size.get_size);
-router.post("/size", image_uploader_middleware, size.post_size);
+router.post("/size", size.post_size);
 router.put("/size", size.update_size);
 router.delete("size", size.delete_size);
 
