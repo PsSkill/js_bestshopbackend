@@ -38,7 +38,7 @@ exports.post_login = async (req, res) => {
         delete user_detail.password;
         return res
             .status(200)
-            .json({ message: "Login successful", token: token });
+            .json({ message: "Login successful", token: token, username: user_detail.name});
     } catch (err) {
         console.error(err);
         return res.status(500).json({ err: "Internal server error" });

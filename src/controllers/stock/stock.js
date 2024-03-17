@@ -13,8 +13,9 @@ exports.get_stocks = async (req, res) => {
   }
   try {
     const query = `
-      SELECT s.id, sl.name AS shop, s.date, s.time, s.name, m.name AS model_name, c.name AS color_name, si.name AS size_name, s.quantity, s.selling_price, s.mrp, s.total_price
+      SELECT s.id, mu.name AS user , sl.name AS shop, s.date, s.time, s.name, m.name AS model_name, c.name AS color_name, si.name AS size_name, s.quantity, s.selling_price, s.mrp, s.total_price
       FROM stock s
+      INNER JOIN master_user mu ON s.user = mu.id
       INNER JOIN shop_location sl ON s.shop_location = sl.id
       INNER JOIN model m ON s.model = m.id
       INNER JOIN color c ON s.color = c.id
@@ -54,8 +55,10 @@ exports.post_stocks = async (req, res) => {
     mrp,
   } = req.body;
   const location = req.body.location;
+  const user = req.body.user_id
 
   if (
+    !user||
     !location ||
     !bill_number ||
     !category ||
@@ -72,7 +75,7 @@ exports.post_stocks = async (req, res) => {
     !mrp
   ) {
     return res.status(400).json({
-      err: "location, bill_number, category, item_name, sub_category, brand, model, color, size, quantity, name, purchasing_price, selling_price, and mrp are required",
+      err: "user, location, bill_number, category, item_name, sub_category, brand, model, color, size, quantity, name, purchasing_price, selling_price, and mrp are required",
     });
   }
 
@@ -89,6 +92,7 @@ exports.post_stocks = async (req, res) => {
 
       if (current_quantity > 0) {
         value_sets.push([
+          user,
           location,
           bill_number,
           current_date,
@@ -113,7 +117,7 @@ exports.post_stocks = async (req, res) => {
 
     if (value_sets.length > 0) {
       const query =
-        "INSERT INTO stock (shop_location, bill_number, date, time, year, category, item_name, sub_category, brand, model, color, size, quantity, name, purchasing_price, selling_price, mrp, total_price) VALUES ?";
+        "INSERT INTO stock (user, shop_location, bill_number, date, time, year, category, item_name, sub_category, brand, model, color, size, quantity, name, purchasing_price, selling_price, mrp, total_price) VALUES ?";
       await post_query_database(query, [value_sets]);
       res.status(200).json("Stock added successfully");
     } else {
