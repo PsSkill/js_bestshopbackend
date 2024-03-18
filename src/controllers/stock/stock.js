@@ -31,7 +31,11 @@ exports.get_stocks = async (req, res) => {
     }
 
     const stocks = await get_query_database(query, query_params);
-    res.json(stocks);
+    const formatted_stocks =  stocks.map(stocks=>({
+      ...stock,
+      date: format_date(new Date(stock.date))
+    }));
+    res.json(formatted_stocks);
   } catch (err) {
     console.error("Error fetching stocks:", err);
     res.status(500).json({ error: err.message });
