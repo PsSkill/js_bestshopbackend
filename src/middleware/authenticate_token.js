@@ -30,9 +30,9 @@ const authenticate_token = async (req, res, next) => {
                 .status(401)
                 .json({ error: "Unauthorized: Invalid token" });
         }
-
         req.body.user_id = decoded.id;
         req.body.location = decoded.location;
+        req.body.role = decoded.role;
         next();
     } catch (err) {
         console.error("Authentication error:", err);

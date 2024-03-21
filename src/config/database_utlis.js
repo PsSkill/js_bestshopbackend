@@ -1,5 +1,5 @@
 const pool = require('./database');
-
+ 
 async function get_query_database(query, params) {
   try {
     const [results] = await pool.promise().query(query, params);

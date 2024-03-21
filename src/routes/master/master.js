@@ -2,6 +2,7 @@ const express = require("express");
 
 const shop_location = require("../../controllers/master/shop_location");
 const role = require("../../controllers/master/role");
+const resource = require("../../controllers/master/resource");
 
 const router = express.Router();
 
@@ -14,5 +15,7 @@ router.get("/role", role.get_role);
 router.post("/role", role.post_role);
 router.put("/role", role.update_role);
 router.delete("/route", role.delete_role);
+
+router.get("/resource", resource.get_resource);
 
 module.exports = router;
